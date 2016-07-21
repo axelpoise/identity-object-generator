@@ -11,15 +11,25 @@ The encoding will be a Hmac with the public key as secret.
  */
 
 
-module.exports = function(pub, name, identityObject){
+module.exports = function(accessObject, identityObject){
 
+    var returnObject = {};
 
-    var key =  NodeRSA(pub)
-    var field = CryptoJS.HmacSHA256(name, pub)
+    Object.keys(accessObject).forEach(function(name){
+        
+        var pub = accessObject[name];
+
     
-    var value = identityObject[field]
-    
-    var bufferVal = new Buffer(value, 'hex');
-    var decrypted = key.decryptPublic(bufferVal)
-    return {name:decrypted.toString('utf8')}
+        var key =  NodeRSA(pub)
+        var field = CryptoJS.HmacSHA256(name, pub)
+        
+        var value = identityObject[field]
+        
+        var bufferVal = new Buffer(value, 'hex');
+        var decrypted = key.decryptPublic(bufferVal)
+        
+        returnObject[name] = decrypted.toString('utf8')
+
+    })
+    return returnObject;
 }

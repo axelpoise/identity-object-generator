@@ -7,22 +7,20 @@ var assert = require('assert')
 
 describe('check encryptor and decryptor', function(){
 
-    var pub;
-    var priv;
-    before(function(){
-        this.timeout(5000000)
-        var key = new NodeRSA()
-        key.generateKeyPair(2048, 65537)
-        priv = key.exportKey('private')
-        pub = key.exportKey('public')
-    })
+
 
 
     it('should encrypt and decrypt a value', function(){
-        var identity = {}
-        var newidentity = encryptor(priv, pub,"name","axel scheele", identity)
+        this.timeout(200000000000)
+        var input = {name:"axel scheele", age:'27'}
+        var identity = {};
+        var encrypted = encryptor(input, identity)
 
-        var name = decryptor(pub,'name', newidentity)
+        console.log('id',encrypted.id)
+        console.log('ref', encrypted.ref)
+        var ref = encrypted.ref;
+        var id = encrypted.id;
+        var name = decryptor(ref, id)
 
         console.log('my name is ',name)
         
